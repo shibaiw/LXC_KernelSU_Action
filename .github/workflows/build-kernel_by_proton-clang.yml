@@ -175,22 +175,6 @@ jobs:
             patch -p0 < $GITHUB_WORKSPACE/kernel_workspace/android-kernel/utils/xt_qtaguid.patch
         fi
 
-    - name: Fix br_vlan Compilation Error
-      run: |
-        # 进入内核源码根目录
-        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        
-        # 1. 确保文件存在
-        if [ ! -f net/bridge/br_vlan.c ]; then
-            echo "❌ 错误：找不到 net/bridge/br_vlan.c，请检查路径！"
-            exit 1
-        fi
-
-        # 2. 检查是否已经包含该头文件，避免重复注入
-        if grep -q "linux/if_vlan.h" net/bridge/br_vlan.c; then
-            echo "ℹ️ 头文件已存在，正在尝试重新注入到首行..."
-            sed -i '/linux\/if_vlan.h/d' net/bridge/br_vlan.c
-        fi
 
         # 3. 注入头文件到第一行
         sed -i '1i #include <linux/if_vlan.h>' net/bridge/br_vlan.c
