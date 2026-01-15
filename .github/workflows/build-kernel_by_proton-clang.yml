@@ -176,12 +176,7 @@ jobs:
         fi
 
 
-        # 3. 注入头文件到第一行
-        sed -i '1i #include <linux/if_vlan.h>' net/bridge/br_vlan.c
-        
-        # 4. 验证注入结果（这一步会在日志里打印前 5 行，方便我们排查）
-        echo "检查注入后的文件头部："
-        head -n 5 net/bridge/br_vlan.c
+
        
     - name: Setup ccache
       if: env.ENABLE_CCACHE == 'true'
