@@ -177,17 +177,27 @@ jobs:
 
     - name: Fix br_vlan Compilation Error
       run: |
+        # 进入内核源码根目录
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-        # 检查文件是否存在，防止脚本因路径问题中断
-        if [ -f net/bridge/br_vlan.c ]; then
-            echo "发现 net/bridge/br_vlan.c，正在注入缺失的头文件..."
-            # 在文件第一行插入头文件引用
-            sed -i '1i #include <linux/if_vlan.h>' net/bridge/br_vlan.c
-            echo "✅ 修复完成"
-        else
-            echo "❌ 未找到 net/bridge/br_vlan.c，请检查源码路径"
+        
+        # 1. 确保文件存在
+        if [ ! -f net/bridge/br_vlan.c ]; then
+            echo "❌ 错误：找不到 net/bridge/br_vlan.c，请检查路径！"
             exit 1
         fi
+
+        # 2. 检查是否已经包含该头文件，避免重复注入
+        if grep -q "linux/if_vlan.h" net/bridge/br_vlan.c; then
+            echo "ℹ️ 头文件已存在，正在尝试重新注入到首行..."
+            sed -i '/linux\/if_vlan.h/d' net/bridge/br_vlan.c
+        fi
+
+        # 3. 注入头文件到第一行
+        sed -i '1i #include <linux/if_vlan.h>' net/bridge/br_vlan.c
+        
+        # 4. 验证注入结果（这一步会在日志里打印前 5 行，方便我们排查）
+        echo "检查注入后的文件头部："
+        head -n 5 net/bridge/br_vlan.c
        
     - name: Setup ccache
       if: env.ENABLE_CCACHE == 'true'
