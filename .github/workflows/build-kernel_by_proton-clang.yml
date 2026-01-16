@@ -263,6 +263,8 @@ jobs:
           echo "CONFIG_BLK_DEV_DM=y"
           echo "CONFIG_DM_THIN_PROVISIONING=y"
           echo "CONFIG_OVERLAY_FS=y"
+          
+          echo "CONFIG_VLAN_8021Q=m"
         } >> $CONFIG_FILE
 
 
