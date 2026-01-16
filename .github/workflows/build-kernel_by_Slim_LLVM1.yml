@@ -295,7 +295,178 @@ jobs:
       with:
         key: build-kernel-${{ env.DEVICE }}${{ env.UPLOADNAME }}
         max-size: 2G
+    - name: Add Docker and Container Configs
+      run: |
+        cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
+        CONFIG_FILE="arch/${{ env.ARCH }}/configs/${{ env.KERNEL_CONFIG }}"
+        
+        echo "Appending advanced container configs to $CONFIG_FILE"
+        
+        {
+          echo "CONFIG_NAMESPACES=y"
 
+          echo "CONFIG_NET_NS=y"
+
+          echo "CONFIG_PID_NS=y"
+
+          echo "CONFIG_IPC_NS=y"
+
+          echo "CONFIG_UTS_NS=y"
+
+          echo "CONFIG_CGROUPS=y"
+
+          echo "CONFIG_CGROUP_CPUACCT=y"
+
+          echo "CONFIG_CGROUP_DEVICE=y"
+
+          echo "CONFIG_CGROUP_FREEZER=y"
+
+          echo "CONFIG_CGROUP_SCHED=y"
+
+          echo "CONFIG_CPUSETS=y"
+
+          echo "CONFIG_MEMCG=y"
+
+          echo "CONFIG_KEYS=y"
+
+          echo "CONFIG_VETH=y"
+
+          echo "CONFIG_BRIDGE=y"
+
+          echo "CONFIG_BRIDGE_NETFILTER=y"
+
+          echo "CONFIG_IP_NF_FILTER=y"
+
+          echo "CONFIG_IP_NF_TARGET_MASQUERADE=y"
+
+          echo "CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y"
+
+          echo "CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y"
+
+          echo "CONFIG_NETFILTER_XT_MATCH_IPVS=y"
+
+          echo "CONFIG_NETFILTER_XT_MARK=y"
+
+          echo "CONFIG_IP_NF_NAT=y"
+
+          echo "CONFIG_NF_NAT=y"
+
+          echo "CONFIG_POSIX_MQUEUE=y"
+
+          echo "CONFIG_NF_NAT_IPV4=y"
+
+          echo "CONFIG_NF_NAT_NEEDED=y"
+
+          echo "CONFIG_CGROUP_BPF=y"
+
+          echo "CONFIG_USER_NS=y"
+
+          echo "CONFIG_SECCOMP=y"
+
+          echo "CONFIG_SECCOMP_FILTER=y"
+
+          echo "CONFIG_CGROUP_PIDS=y"
+
+          echo "CONFIG_MEMCG_SWAP=y"
+
+          echo "CONFIG_MEMCG_SWAP_ENABLED=y"
+
+          echo "CONFIG_IOSCHED_CFQ=y"
+
+          echo "CONFIG_CFQ_GROUP_IOSCHED=y"
+
+          echo "CONFIG_BLK_CGROUP=y"
+
+          echo "CONFIG_BLK_DEV_THROTTLING=y"
+
+          echo "CONFIG_CGROUP_PERF=y"
+
+          echo "CONFIG_CGROUP_HUGETLB=y"
+
+          echo "CONFIG_NET_CLS_CGROUP=y"
+
+          echo "CONFIG_CGROUP_NET_PRIO=y"
+
+          echo "CONFIG_CFS_BANDWIDTH=y"
+
+          echo "CONFIG_FAIR_GROUP_SCHED=y"
+
+          echo "CONFIG_RT_GROUP_SCHED=y"
+
+          echo "CONFIG_IP_NF_TARGET_REDIRECT=y"
+
+          echo "IP_VS=y"
+
+          echo "CONFIG_IP_VS_NFCT=y"
+
+          echo "CONFIG_IP_VS_PROTO_TCP=y"
+
+          echo "CONFIG_IP_VS_PROTO_UDP=y"
+
+          echo "CONFIG_IP_VS_RR=y"
+
+          echo "CONFIG_SECURITY_SELINUX=y"
+
+          echo "CONFIG_SECURITY_APPARMOR=y"
+
+          echo "CONFIG_EXT4_FS=y"
+
+          echo "CONFIG_EXT4_FS_POSIX_ACL=y"
+
+          echo "CONFIG_EXT4_FS_SECURITY=y"
+
+          echo "CONFIG_VXLAN=y"
+
+          echo "CONFIG_BRIDGE_VLAN_FILTERING=y"
+
+          echo "CONFIG_CRYPTO=y"
+
+          echo "CONFIG_CRYPTO_AEAD=y"
+
+          echo "CONFIG_CRYPTO_GCM=y"
+
+          echo "CONFIG_CRYPTO_SEQIV=y"
+
+          echo "CONFIG_CRYPTO_GHASH=y"
+
+          echo "CONFIG_XFRM=y"
+
+          echo "CONFIG_XFRM_USER=y"
+
+          echo "CONFIG_XFRM_ALGO=y"
+
+          echo "INET_ESP=y"
+
+          echo "CONFIG_INET_XFRM_MODE_TRANSPORT=y"
+
+          echo "CONFIG_IPVLAN=y"
+
+          echo "CONFIG_MACVLAN=y"
+
+          echo "CONFIG_DUMMY=y"
+
+          echo "CONFIG_NF_NAT_FTP=y"
+
+          echo "CONFIG_NF_CONNTRACK_FTP=y"
+
+          echo "CONFIG_NF_NAT_TFTP=y"
+
+          echo "CONFIG_NF_CONNTRACK_TFTP=y"
+
+          echo "CONFIG_AUFS_FS=y"
+
+          echo "CONFIG_BTRFS_FS=y"
+
+          echo "CONFIG_BTRFS_FS_POSIX_ACL=y"
+
+          echo "CONFIG_BLK_DEV_DM=y"
+
+          echo "CONFIG_DM_THIN_PROVISIONING=y"
+
+          echo "CONFIG_OVERLAY_FS=y"
+          
+          echo "CONFIG_VLAN_8021Q=m"
+        } >> $CONFIG_FILE
     - name: Build kernel
       run: |
         cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
